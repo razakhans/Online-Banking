@@ -69,17 +69,12 @@ export const getAccount = async ({ appwriteItemId }: getAccountProps) => {
     // get bank from db
     const bank = await getBank({ documentId: appwriteItemId });
 
-    // get account info from plaid
-    const accountsResponse = await plaidClient.accountsGet({
-      access_token: bank.accessToken,
-    });
-    const accountData = accountsResponse.data.accounts[0];
-
     // get transfer transactions from appwrite
     const transferTransactionsData = await getTransactionsByBankId({
       bankId: bank.$id,
     });
-
+    //console.log({ transferTransactionsData });
+    //if (!transferTransactionsData) return [];
     const transferTransactions = transferTransactionsData.documents.map(
       (transferData: Transaction) => ({
         id: transferData.$id,
@@ -91,6 +86,13 @@ export const getAccount = async ({ appwriteItemId }: getAccountProps) => {
         type: transferData.senderBankId === bank.$id ? "debit" : "credit",
       })
     );
+
+    // get account info from plaid
+    const accountsResponse = await plaidClient.accountsGet({
+      access_token: bank.accessToken,
+    });
+    const accountData = accountsResponse.data.accounts[0];
+    console.log(accountData);
 
     // get institution info from plaid
     const institution = await getInstitution({
@@ -115,7 +117,7 @@ export const getAccount = async ({ appwriteItemId }: getAccountProps) => {
     };
 
     // sort transactions by date such that the most recent transaction is first
-      const allTransactions = [...transactions, ...transferTransactions].sort(
+    const allTransactions = [...transactions, ...transferTransactions].sort( 
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
 
@@ -124,7 +126,7 @@ export const getAccount = async ({ appwriteItemId }: getAccountProps) => {
       transactions: allTransactions,
     });
   } catch (error) {
-    console.error("An error occurred while getting the account:", error);
+    // console.error("An error occurred while getting the account:", error);
   }
 };
 

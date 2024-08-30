@@ -30,6 +30,7 @@ export const createTransaction = async (transaction: CreateTransactionProps) => 
   }
 }
 
+
 export const getTransactionsByBankId = async ({bankId}: getTransactionsByBankIdProps) => {
   try {
     const { database } = await createAdminClient();
@@ -56,6 +57,6 @@ export const getTransactionsByBankId = async ({bankId}: getTransactionsByBankIdP
 
     return parseStringify(transactions);
   } catch (error) {
-    console.log(error);
+    // console.log(error);
   }
 }

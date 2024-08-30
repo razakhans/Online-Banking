@@ -30,7 +30,8 @@ const AuthForm = ({ type }: { type: string }) => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const formSchema = authFormSchema(type);
-  console.log({ user });
+  //console.log({ user });
+  
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -58,15 +59,15 @@ const AuthForm = ({ type }: { type: string }) => {
         password: data.password,
       };
 
-      if (type === "sign-up") {
+      if (type === 'sign-up') {
         const newUser = await signUp(userData);
         setUser(newUser);
       }
-      if (type === "sign-in") {
+      if (type === 'sign-in') {
         const response = await signIn({
           email: data.email,
           password: data.password,
-        });
+        })
         if (response) router.push("/");
       }
     } catch (error) {
@@ -93,7 +94,12 @@ const AuthForm = ({ type }: { type: string }) => {
         </Link>
         <div className="flex flex-col gap-1 md:gap-3">
           <h1 className="text-24 lg:text-36 font-semibold text-gray-900">
-            {user ? "Link Account" : type === "sign-in" ? "Sign In" : "Sign Up"}
+            {user 
+            ? 'Link Account' 
+            : type === 'sign-in' 
+            ? 'Sign In' 
+            : 'Sign Up'
+            }
             <p className="text-16 font-normal text-gray-600">
               {user
                 ? "Link your account to get started"
@@ -111,21 +117,21 @@ const AuthForm = ({ type }: { type: string }) => {
         <>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              {type === "sign-up" && (
+              {type === 'sign-up' && (
                 <>
                   <div className="flex gap-4">
                     <CustomInput
                       control={form.control}
-                      name="firstName"
-                      label="First Name"
-                      placeholder="Enter your first name"
+                      name='firstName'
+                      label='First Name'
+                      placeholder='Enter your first name'
                     />
 
                     <CustomInput
                       control={form.control}
-                      name="lastName"
-                      label="last Name"
-                      placeholder="Enter your last name"
+                      name='lastName'
+                      label='last Name'
+                      placeholder='Enter your last name'
                     />
                   </div>
                   <CustomInput
